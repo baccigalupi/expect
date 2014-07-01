@@ -3,7 +3,7 @@ module Expectorant
     attr_writer :delta
 
     def assert_close(expected=nil, &block)
-      assert(assertion_method('in_delta'), resolve(expected || block), actual, delta)
+      assert('in_delta', Expector.resolve(expected || block), actual, delta)
     end
 
     alias :of :assert_close
