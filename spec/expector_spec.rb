@@ -94,7 +94,7 @@ class ExpectorantExpectorTest < Minitest::Test
   def test_expection_is_a_block
     @expector.expect{ 2 * 2 }.equals{ 2 + 2 }
     @expector.expect(4.06).within(0.1).of{ 2 * 2 }
-    @expector.expect(4.00001).close_to{ 2 * 2 }
+    @expector.expect(4.00001).to.be.close_to{ 2 * 2 }
     @expector.expect([42]).not.to.include{ 2 * 2 }
     @expector.expect(0).greater_than{ 0 - 2 }
   end

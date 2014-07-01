@@ -10,31 +10,14 @@ module Expectorant
     extend Forwardable
     def_delegators :@asserter, :actual, :reset, :negated, :assert, :assert_comparison
 
-    def expect(actual=nil, &block)
+    def expect(actual=Resolver::NullArgument, &block)
       reset
-      asserter.actual = resolve(actual || block)
+      asserter.actual = resolve(actual, block)
       self
     end
 
-    def to
-      self
-    end
-
-    alias :should :to
-    alias :be :to
-    alias :is :to
-
-    def not
-      asserter.negate
-      self
-    end
-
-    alias :should_not :not
-    alias :not_to :not
-    alias :to_not :not
-
-    def equal(expected=nil, &block)
-      assert('equal', resolve(expected || block), actual)
+    def equal(expected=Resolver::NullArgument, &block)
+      assert('equal', resolve(expected, block), actual)
     end
 
     alias :== :equal
@@ -57,13 +40,13 @@ module Expectorant
 
     alias :be_within :within
 
-    def close_to(expected=nil, &block)
+    def close_to(expected=Resolver::NullArgument, &block)
       p = Proximal.new(asserter)
-      p.assert_close(expected || block)
+      p.assert_close(resolve(expected, block))
     end
 
-    def include(expected=nil, &block)
-      assert('includes', actual, resolve(expected || block))
+    def include(expected=Resolver::NullArgument, &block)
+      assert('includes', actual, resolve(expected, block))
     end
 
     alias :contain :include
@@ -81,20 +64,20 @@ module Expectorant
 
     alias :matches :match
 
-    def greater_than(other=nil, &block)
-      assert_comparison(:>, resolve(other || block))
+    def greater_than(other=Resolver::NullArgument, &block)
+      assert_comparison(:>, resolve(other, block))
     end
 
-    def greater_than_or_equal(other=nil, &block)
-      assert_comparison(:>=, resolve(other || block))
+    def greater_than_or_equal(other=Resolver::NullArgument, &block)
+      assert_comparison(:>=, resolve(other, block))
     end
 
-    def less_than(other=nil, &block)
-      assert_comparison(:<, resolve(other || block))
+    def less_than(other=Resolver::NullArgument, &block)
+      assert_comparison(:<, resolve(other, block))
     end
 
-    def less_than_or_equal(other=nil, &block)
-      assert_comparison(:<=, resolve(other || block))
+    def less_than_or_equal(other=Resolver::NullArgument, &block)
+      assert_comparison(:<=, resolve(other, block))
     end
 
     alias :>  :greater_than
@@ -106,14 +89,27 @@ module Expectorant
 
     end
 
-    # -----------------------
-
-    def self.resolve(object)
-      object.respond_to?(:call) ? object.call : object
+    def to
+      self
     end
 
-    def resolve(object)
-      self.class.resolve(object)
+    alias :should :to
+    alias :be :to
+    alias :is :to
+
+    def not
+      asserter.negate
+      self
+    end
+
+    alias :should_not :not
+    alias :not_to :not
+    alias :to_not :not
+
+    private
+
+    def resolve(object, block)
+      Resolver.new(object, block).value
     end
   end
 end
