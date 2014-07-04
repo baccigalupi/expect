@@ -10,12 +10,14 @@ module Expectorant
     extend Forwardable
     def_delegators :@asserter, :actual, :reset, :negated, :assert, :assert_comparison
 
-    def expect(actual=Resolver::NullArgument, &block)
+    # ------ setup
+    def expect(a=Resolver::NullArgument, &block)
       reset
-      asserter.actual = resolve(actual, block)
+      asserter.actuals(a, block)
       self
     end
 
+    # --------- assertions
     def equal(expected=Resolver::NullArgument, &block)
       assert('equal', resolve(expected, block), actual)
     end
@@ -85,9 +87,12 @@ module Expectorant
     alias :<  :less_than
     alias :<= :less_than_or_equal
 
-    def change(expected=nil, &block)
-
+    def change(expected=Resolver::NullArgument, &block)
+      asserter.negate
+      assert('equal', resolve(expected, block), actual)
     end
+
+    # chaining methods ------
 
     def to
       self

@@ -3,7 +3,7 @@ class ExpectorantExpectorTest < Minitest::Test
     @expector = Expectorant::Expector.new(self)
   end
 
-  def fails_test(&block)
+  def expect_test_to_fail(&block)
     assert_raises Minitest::Assertion, &block
   end
 
@@ -20,7 +20,7 @@ class ExpectorantExpectorTest < Minitest::Test
   end
 
   def test_equality_fail
-    fails_test do
+    expect_test_to_fail do
       @expector.expect(true).to.equal(false)
     end
   end
@@ -35,7 +35,7 @@ class ExpectorantExpectorTest < Minitest::Test
   end
 
   def test_equality_negation_fail
-    fails_test do
+    expect_test_to_fail do
       @expector.expect(true).not.to.equal(true)
     end
   end
@@ -99,11 +99,15 @@ class ExpectorantExpectorTest < Minitest::Test
     @expector.expect(0).greater_than{ 0 - 2 }
   end
 
-  def x_test_expecting_around_change
+  def test_expecting_change
     foo = 1
+
     @expector.expect{ foo += 1 }.to.change(foo)
-    @expector.expect{ foo += 1 }.to.change{ foo }
-    @expector.expect{ foo }.not.to.change{ foo }
-    @expector.expect{ foo += 1 }.to.change{ foo }.by(1)
+
+    expect_test_to_fail do
+      @expector.expect{ foo }.to.change{ foo }
+    end
   end
+
+  # @expector.expect{ foo += 1 }.to.change{ foo }.by(1)
 end
