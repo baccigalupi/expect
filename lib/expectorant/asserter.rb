@@ -28,10 +28,7 @@ module Expectorant
 
     def assert(postfix, *args)
       test_context.send(assertion_method(postfix), *args)
-    end
-
-    def assert_comparison(operator, other)
-      assert('operator', actual, operator, other)
+      self
     end
 
     def assertion_method(postfix)
@@ -40,6 +37,10 @@ module Expectorant
 
     def prefix
       negated ? 'refute' : 'assert'
+    end
+
+    def resolve(object, block)
+      Resolver.new(object, block).value
     end
   end
 end

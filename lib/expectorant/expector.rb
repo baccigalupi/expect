@@ -8,91 +8,69 @@ module Expectorant
     end
 
     extend Forwardable
-    def_delegators :@asserter, :actual, :reset, :negated, :assert, :assert_comparison
+    def_delegators :asserter, :actual, :assert, :assert_comparison
 
     # ------ setup
     def expect(a=Resolver::NullArgument, &block)
-      reset
+      asserter.reset
       asserter.actuals(a, block)
       self
     end
 
     # --------- assertions
-    def equal(expected=Resolver::NullArgument, &block)
-      assert('equal', resolve(expected, block), actual)
+    def equalizer
+      @equalizer ||= Assertion::Equalizer.new(asserter)
     end
 
-    alias :== :equal
-    alias :equals :equal
+    def_delegators :equalizer, :equal, :equals, :==
 
-    def exist
-      asserter.negate # toggles so that the nil check turns to an exist
-      assert('nil', actual)
+    def existential
+      @existential ||= Assertion::Existential.new(asserter)
     end
 
-    def empty
-      assert('empty', actual)
+    def_delegators :existential, :exist, :exists
+
+    def collector
+      @collector ||= Assertion::Collector.new(asserter)
     end
 
-    def within(delta)
-      p = Proximal.new(asserter)
-      p.delta = delta
-      p
+    def_delegators :collector, :empty, :include, :contain
+
+    def proximal
+      @proximal ||= Assertion::Proximal.new(asserter)
     end
 
-    alias :be_within :within
+    def_delegators :proximal, :within, :close_to
 
-    def close_to(expected=Resolver::NullArgument, &block)
-      p = Proximal.new(asserter)
-      p.assert_close(resolve(expected, block))
+    def typetastic
+      @typetastic ||= Assertion::Typetastic.new(asserter)
     end
 
-    def include(expected=Resolver::NullArgument, &block)
-      assert('includes', actual, resolve(expected, block))
+    def_delegators :typetastic, :instance_of, :an, :a
+
+    def matcher
+      @matcher ||= Assertion::Matcher.new(asserter)
     end
 
-    alias :contain :include
+    def_delegators :matcher, :match, :matches
 
-    def instance_of(klass)
-      assert('instance_of', klass, actual)
+    def comparitor
+      @comparitor ||= Assertion::Comparitor.new(asserter)
     end
 
-    alias :an :instance_of
-    alias :a :instance_of
+    def_delegators :comparitor,
+      :greater_than, :greater_than_or_equal,
+      :>, :>=,
+      :less_than, :less_than_or_equal,
+      :<, :<=
 
-    def match(expression)
-      assert('match', expression, actual)
+    def cambiarse
+      @cambiarse ||= Assertion::Cambiarse.new(asserter)
     end
 
-    alias :matches :match
+    def_delegators :cambiarse, :change, :by
 
-    def greater_than(other=Resolver::NullArgument, &block)
-      assert_comparison(:>, resolve(other, block))
-    end
-
-    def greater_than_or_equal(other=Resolver::NullArgument, &block)
-      assert_comparison(:>=, resolve(other, block))
-    end
-
-    def less_than(other=Resolver::NullArgument, &block)
-      assert_comparison(:<, resolve(other, block))
-    end
-
-    def less_than_or_equal(other=Resolver::NullArgument, &block)
-      assert_comparison(:<=, resolve(other, block))
-    end
-
-    alias :>  :greater_than
-    alias :>= :greater_than_or_equal
-    alias :<  :less_than
-    alias :<= :less_than_or_equal
-
-    def change(expected=Resolver::NullArgument, &block)
-      asserter.negate
-      assert('equal', resolve(expected, block), actual)
-    end
-
-    # chaining methods ------
+    # chaining methods for the DSL ------
 
     def to
       self
