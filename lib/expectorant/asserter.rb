@@ -23,7 +23,7 @@ module Expectorant
     end
 
     def actual
-      actuals_resolver.value
+      @actual ||= actuals_resolver.value
     end
 
     def assert(postfix, *args)

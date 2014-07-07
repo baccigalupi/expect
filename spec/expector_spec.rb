@@ -109,7 +109,7 @@ class ExpectorantExpectorTest < Minitest::Test
     end
   end
 
-  def x_test_expecting_change_by_amount
+  def test_expecting_change_by_amount
     foo = 1
 
     @expector.expect{ foo += 1 }.to.change{ foo }.by(1)

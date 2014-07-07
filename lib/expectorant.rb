@@ -36,7 +36,7 @@ module Expectorant
     register :within, :close_to,         Assertion::Proximal
     register :instance_of, :an, :a,      Assertion::Typetastic
     register :match, :matches,           Assertion::Matcher
-    register :change, :by,               Assertion::Cambiarse
+    register :change,                    Assertion::Cambiarse
     register :greater_than, :greater_than_or_equal,
              :>, :>=,
              :less_than, :less_than_or_equal,
