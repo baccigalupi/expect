@@ -1,7 +1,7 @@
 module Expectorant
   class Asserter
     attr_reader :test_context, :negated, :actuals_resolver
-    # attr_accessor :actual
+    attr_accessor :message
 
     def initialize(test_context)
       @test_context = test_context
@@ -27,6 +27,7 @@ module Expectorant
     end
 
     def assert(postfix, *args)
+      args << message if message
       test_context.send(assertion_method(postfix), *args)
       self
     end
@@ -37,6 +38,10 @@ module Expectorant
 
     def prefix
       negated ? 'refute' : 'assert'
+    end
+
+    def not_description
+      negated ? 'not ' : ''
     end
 
     def resolve(object, block)

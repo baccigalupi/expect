@@ -1,7 +1,13 @@
 module Expectorant
   module Assertion
     class Proximal < SimpleDelegator
+      def asserter
+        __getobj__
+      end
+
       def close_to(expected=Resolver::NullArgument, &block)
+        resolved = resolve(expected, block)
+        asserter.message = "Expected #{resolved} and #{actual} #{not_description}to be within #{delta} of each other"
         assert('in_delta', resolve(expected, block), actual, delta)
       end
 

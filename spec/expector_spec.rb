@@ -44,6 +44,10 @@ class ExpectorantExpectorTest < Minitest::Test
   def test_existence
     @expector.expect(true).to.exist
     @expector.expect(nil).to_not.exist
+
+    expect_test_to_fail do
+      @expector.expect(true).not.to.exist
+    end
   end
 
   def test_empty
@@ -51,12 +55,20 @@ class ExpectorantExpectorTest < Minitest::Test
     @expector.expect([]).to.be.empty
     @expector.expect([1]).should_not.be.empty
     @expector.expect([1]).not.empty
+
+    expect_test_to_fail do
+      @expector.expect([1]).is.empty
+    end
   end
 
   def test_proximity
     @expector.expect(3.2).to.be.within(0.1).of(3.25)
     @expector.expect(3.2).within(0.1).of(3.25)
     @expector.expect(3.2).close_to(3.200001)
+
+    expect_test_to_fail do
+      @expector.expect(3.2).not.to.be.close_to(3.200001)
+    end
   end
 
   def test_inclusion
@@ -64,17 +76,29 @@ class ExpectorantExpectorTest < Minitest::Test
     @expector.expect([]).should_not.include(23)
     @expector.expect('foo-bar').should.include('foo')
     @expector.expect('foo-bar').to.contain('foo')
+
+    expect_test_to_fail do
+      @expector.expect("foo-bar").should.not.contain('foo')
+    end
   end
 
   def test_type
     @expector.expect([]).is.instance_of(Array)
     @expector.expect('string').is.not.a(Hash)
     @expector.expect([]).is.an(Array)
+
+    expect_test_to_fail do
+      @expector.expect("foo").is.not.a(String)
+    end
   end
 
   def test_regex_matching
     @expector.expect('Hello world!').not.to.match(/hello/)
     @expector.expect('Hello world!').matches(/hello/i)
+
+    expect_test_to_fail do
+      @expector.expect('Hello world!').not.to.match(/hello/i)
+    end
   end
 
   def test_comparisons
@@ -82,6 +106,10 @@ class ExpectorantExpectorTest < Minitest::Test
     @expector.expect(21).is.not.greater_than(22)
     @expector.expect(22) >= 22
     @expector.expect(0).not <= -2
+
+    expect_test_to_fail do
+      @expector.expect(0).is <= -2
+    end
   end
 
   # ---------------
@@ -115,7 +143,7 @@ class ExpectorantExpectorTest < Minitest::Test
     @expector.expect{ foo += 1 }.to.change{ foo }.by(1)
 
     expect_test_to_fail do
-      @expector.expect{ foo += 1 }.to.change{ foo }.by(7)
+      @expector.expect{ foo += 1 }.to.change{ foo }.by(2)
     end
   end
 end
