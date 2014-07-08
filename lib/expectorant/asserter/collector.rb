@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Collector < SimpleDelegator
       def empty
         assert('empty', actual)

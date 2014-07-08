@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Comparitor < SimpleDelegator
       def greater_than(other=Resolver::NullArgument, &block)
         assert_comparison(:>, resolve(other, block))

@@ -8,9 +8,6 @@ module Expectorant
       @delegates = {}
     end
 
-    extend Forwardable
-    def_delegators :asserter, :actual, :assert, :assert_comparison
-
     # ------ setup
     def expect(a=Resolver::NullArgument, &block)
       asserter.reset
@@ -38,6 +35,7 @@ module Expectorant
     alias :to_not :not
 
     # ----- delegation to asserters
+    
     def registrar
       Expectorant.registrar
     end

@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Typetastic < SimpleDelegator
       def instance_of(klass)
         assert('instance_of', klass, actual)

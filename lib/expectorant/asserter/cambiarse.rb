@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Cambiarse < SimpleDelegator
       attr_reader :original_value
 

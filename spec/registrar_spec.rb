@@ -1,5 +1,5 @@
 class ExpectorantRegistrarTest < Minitest::Test
-  include Expectorant::Expect
+  include Expectorant::Mixin::Expect
 
   class FooeyMatcher < Struct.new(:asserter)
     def nilish

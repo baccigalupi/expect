@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Existential < SimpleDelegator
       def asserter
         __getobj__

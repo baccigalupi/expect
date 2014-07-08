@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Proximal < SimpleDelegator
       def asserter
         __getobj__

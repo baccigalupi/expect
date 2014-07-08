@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Matcher < SimpleDelegator
       def match(expression)
         assert('match', expression, actual)

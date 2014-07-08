@@ -1,5 +1,5 @@
 module Expectorant
-  module Assertion
+  class Asserter
     class Equalizer < SimpleDelegator
       def equal(expected=Resolver::NullArgument, &block)
         assert('equal', resolve(expected, block), actual)
