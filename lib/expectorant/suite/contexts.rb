@@ -18,7 +18,7 @@ module Expectorant
 
       def run(type, identifier)
         index = collection.find_index{|context| context.has_spec?(identifier) }
-        collection[0..index].each{|context| context.send("run_#{type}s")}
+        collection[0..index].each{|context| context.run(type)}
       end
     end
   end

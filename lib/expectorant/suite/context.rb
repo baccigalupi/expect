@@ -1,28 +1,20 @@
 module Expectorant
   class Suite
     class Context < Struct.new(:suite_class, :description, :block)
-      def blocks
-        @blocks ||= []
+      def callbacks
+        @callbacks ||= []
       end
 
-      class Block < Struct.new(:type, :block)
+      class Callback < Struct.new(:type, :block)
       end
 
       def add_hook(type, block)
-        blocks << Block.new(type, block)
+        callbacks << Callback.new(type, block)
       end
 
       def run(type)
-        relevant = blocks.find_all{|block| block.type == type}
-        relevant.each(&:call)
-      end
-
-      def befores
-        @befores ||= []
-      end
-
-      def afters
-        @afters ||= []
+        relevant = callbacks.find_all{|callback| callback.type == type}
+        relevant.each{|callback| callback.block.call }
       end
 
       def specs
@@ -36,14 +28,6 @@ module Expectorant
       def it(description='anonymous', block)
         specs << spec = Spec.new(description, block)
         suite_class.define_spec(spec)
-      end
-
-      def run_befores
-        befores.each(&:call)
-      end
-
-      def run_afters
-        afters.each(&:call)
       end
 
       def has_spec?(identifier)

@@ -12,7 +12,7 @@ module Expectorant
       alias :describe :context
 
       def x_context(description='anonymous', &block)
-        warn "Context '#{description}' is temporarily x'd out"
+        contexts.current.it("Context: #{description}", nil)
       end
 
       alias :x_describe :x_context
@@ -30,12 +30,17 @@ module Expectorant
       end
 
       def before(&block)
-        contexts.current.befores << block
+        contexts.current.add_hook(:before, block)
       end
 
       def after(&block)
-        contexts.current.afters << block
+        contexts.current.add_hook(:after, block)
       end
+
+      def let(name, &block)
+      end
+
+      # ------------
 
       def define_spec(spec)
         define_method(spec.identifier, &spec.proc)

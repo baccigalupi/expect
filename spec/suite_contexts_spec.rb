@@ -102,6 +102,6 @@ class ExpectorantSuiteContextsTest < Expectorant::Suite
   end
 end
 
-NUMBER_OF_SPECS = 9
+NUMBER_OF_SPECS = 9 + 1 # 1 for the x_context which creates a pending
 ExpectorantSuiteContextsTest.raise_if_number_of_specs_wrong(NUMBER_OF_SPECS)
 ExpectorantSuiteContextsTest.raise_if_after_not_called(NUMBER_OF_SPECS)
