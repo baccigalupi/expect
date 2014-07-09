@@ -20,6 +20,7 @@ require "expectorant/asserter/comparitor"
 require "expectorant/asserter/cambiarse"
 
 require "expectorant/mixin/expect"
+require "expectorant/mixin/contexts"
 
 require "expectorant/suite"
 require "expectorant/suite/context"

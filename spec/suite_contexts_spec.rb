@@ -63,7 +63,7 @@ class ExpectorantSuiteContextsTest < Expectorant::Suite
       expect(TestValues.call_stack).to.equal(['before first', 'before second'])
     end
 
-    context "third level context" do
+    describe "third level context, aliased to describe" do
       before do
         TestValues.third_level = 1
         TestValues.call_stack << 'before third'
@@ -73,7 +73,21 @@ class ExpectorantSuiteContextsTest < Expectorant::Suite
         expect(TestValues.third_level).to.equal(1)
         expect(TestValues.call_stack).to.equal(['before first', 'before second', 'before third'])
       end
+
+      specify "runs as an alias" do
+        expect(true).to.equal(true)
+      end
     end
+  end
+
+  x_context "this won't get run" do
+    it "should not get here" do
+      expect(true).to.equal(false)
+    end
+  end
+
+  xit "this will be pending" do
+    expect(true).to.equal(false)
   end
 
   # testing general class state
@@ -88,6 +102,6 @@ class ExpectorantSuiteContextsTest < Expectorant::Suite
   end
 end
 
-NUMBER_OF_SPECS = 7
+NUMBER_OF_SPECS = 9
 ExpectorantSuiteContextsTest.raise_if_number_of_specs_wrong(NUMBER_OF_SPECS)
 ExpectorantSuiteContextsTest.raise_if_after_not_called(NUMBER_OF_SPECS)

@@ -1,6 +1,22 @@
 module Expectorant
   class Suite
     class Context < Struct.new(:suite_class, :description, :block)
+      def blocks
+        @blocks ||= []
+      end
+
+      class Block < Struct.new(:type, :block)
+      end
+
+      def add_hook(type, block)
+        blocks << Block.new(type, block)
+      end
+
+      def run(type)
+        relevant = blocks.find_all{|block| block.type == type}
+        relevant.each(&:call)
+      end
+
       def befores
         @befores ||= []
       end
