@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Expectorant::VERSION
   spec.authors       = ["Kane Baccigalupi"]
   spec.email         = ["baccigalupi@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Sugar DSL for your Test Unit classes: expect(something).to.be(something_else); contexts, lets and more}
+  spec.description   = %q{Sugar DSL for your Test Unit classes: expect(something).to.be(something_else); contexts, lets and more}
+  spec.homepage      = "http://github.com/baccigalupi/expect"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

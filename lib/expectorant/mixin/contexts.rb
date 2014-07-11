@@ -38,12 +38,17 @@ module Expectorant
       end
 
       def let(name, &block)
+        contexts.current.add_let(name, block)
       end
 
       # ------------
 
       def define_spec(spec)
         define_method(spec.identifier, &spec.proc)
+      end
+
+      def define_let(name, block)
+        define_method(name, &block)
       end
     end
   end
